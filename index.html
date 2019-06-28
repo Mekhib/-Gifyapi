@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+<p>Search below to find a gif:</p>
+<input type="text" name="search" id="form">search here.
+<input type="submit" value="Submit" id="submit">
+<div id="movies"></div>
+</body>
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+<script>
+var gifs = ["burgers", "horses", "titanic"];
+var anwser = $("#form").val();
+//On click function for submit button
+
+function search(){ 
+    $("#movies").empty();
+    for (var i=0; i < gifs.length; i++){
+    console.log(gifs[i]);
+    var button=$("<button>");
+    button.addClass("button");
+    button.on('click', function(){
+     var value =$(this).text();
+     var queryurl = "http://api.giphy.com/v1/gifs/search?q=" + value + "&api_key=VhSwqkDsHEY0WfxWX9vglraP9rVEPAtD";
+    $.ajax({
+    url: queryurl,
+    method: "GET"
+    })
+    .then(function(response) {
+    console.log(queryurl);
+    var picturesdata = response.data;
+    for (var i = 0; i < picturesdata.length; i++) {
+    console.log(picturesdata[i]);
+    var p = $("<p>").text("Rating: " + picturesdata[i].rating);
+    var pictures = $("<img>").attr("src", picturesdata[i].images.fixed_height_still.url)
+    console.log(picturesdata[i].images.fixed_height_still.url);
+    $("#movies").append(p);
+    $("#movies").append(pictures);
+    pictures.addClass("image");
+  
+}
+});
+})
+    $("#movies").append(button); 
+    button.text(gifs[i]);
+}}
+$("#submit").on("click", function(){
+$(".image").empty();
+ var anwser = $("#form").val();
+console.log(anwser);
+var array = gifs.push(anwser);
+search();
+})
+$(".button").on('click', function(){
+  var buttonName = $(this).text();
+  console.log("you clicked me");
+var queryurl = "http://api.giphy.com/v1/gifs/search?q=" + anwser + "&api_key=VhSwqkDsHEY0WfxWX9vglraP9rVEPAtD";
+$.ajax({
+    url: queryurl,
+    method: "GET"
+    })
+.then(function(response) {
+    console.log(response);
+});
+})
+search();
+//Still and not still functions
+</script>
+</html>
